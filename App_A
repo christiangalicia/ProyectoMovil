@@ -1,0 +1,42 @@
+import React from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
+import ArtistBox from './modulos/ArtistBox';
+import {getArtists} from './modulos/api-clienteA';
+export default class App extends React.Component {
+    state = {artists: []}
+    componentDidMount() {
+        getArtists().then((datos) => this.setState({artists: datos}))
+    }
+    onClic(item) {
+        console.warn(item); 
+    }
+    render() {
+        return (
+                <View style={styles.container}>          
+                    <FlatList  
+                        data={this.state.artists}
+                        renderItem=
+                        {({item})=>{ return (
+                                        <TouchableOpacity
+                                            onPress={ () => this.onClic(item) }>
+                                             <ArtistBox artist={item} /> 
+                                        </TouchableOpacity>)
+                                    }
+                        } />
+                </View>
+                            );
+            }
+        }
+        const styles = StyleSheet.create({
+            container: {
+                flex: 1,
+                backgroundColor: '#fff',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                marginTop: 25,
+            }
+
+        });
+
+
+
