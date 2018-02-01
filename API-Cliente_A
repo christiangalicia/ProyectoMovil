@@ -1,0 +1,16 @@
+const URL='http://ws.audioscrobbler.com/2.0/?method=geo.gettopartists&country=mexico&api_key=http://ws.audioscrobbler.com/2.0/?method=geo.gettopartists&country=mexico&api_key=7139448e75e13fc094308db0071da566&format=json&format=json';
+function getArtists(){
+    return fetch(URL).then( response => response.json())
+            .then(datosJson => datosJson.topartists.artist)
+            .then( artists => artists.map(artist =>{
+                return {
+                    image: artist.image[2]['#text'],
+                    name:artist.name,
+                    likes: 348,
+                    comments: 120
+                }
+            }))
+    
+}
+
+export {getArtists}
