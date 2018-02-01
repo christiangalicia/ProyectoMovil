@@ -1,0 +1,56 @@
+
+
+
+import React from 'react';
+import { StyleSheet,Text,  View , Image} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+export default class ArtistBox extends React.Component {
+  render() {    
+     const {image, name, likes, comments} = this.props.artist;
+     return (
+     
+          <View style={styles.caja}>
+             <Image style={styles.imagen} source={{uri: image}} /> 
+              <View style={styles.info}>
+              <Text style={styles.nombre} >{name}</Text>
+                      <View style={styles.likes}> 
+                      <Text>{likes}</Text>
+                      <Text>{comments}</Text>
+                      </View>
+                      <View style={styles.likes}> 
+                        <Icon name="thumbs-o-up" size={30} color="#900" />
+                        <Icon name="commenting-o" size={30} color="#900" /> 
+                      </View>
+             </View>
+         </View>
+  
+    );
+  }
+}
+const styles = StyleSheet.create({
+
+  caja: {
+      backgroundColor: '#ccc',
+      flexDirection: 'row', 
+      height:150,
+      marginBottom: 5,
+  },  
+  imagen:{
+      width:150,  
+      height:150
+  },
+  nombre: {
+      fontSize: 28,   
+      textAlign: 'center', 
+   
+  }, 
+  likes:{
+      flexDirection: 'row',
+      justifyContent: 'space-around', 
+  },
+  info: {
+    flex: 1,  
+   justifyContent: 'center',
+  },
+
+});
