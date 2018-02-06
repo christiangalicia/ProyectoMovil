@@ -18,3 +18,12 @@ export default class App extends React.Component {
             }
         }
      
+     const styles = StyleSheet.create({
+   container: {
+                flex: 1,
+                backgroundColor: '#fff',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                marginTop: 25,
+            }
+});
