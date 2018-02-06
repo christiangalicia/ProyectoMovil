@@ -1,0 +1,27 @@
+import React from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
+import ArtistBox from './ArtistBox';
+import {Actions} from 'react-native-router-flux';
+export default class ArtistList extends React.Component {
+    onClic(item){  
+        Actions.artistView({artist: item});
+    }
+    render() {
+        arreglo= this.props.artistlist;
+            return ( 
+                    <FlatList  
+                        data={arreglo}
+                        renderItem=
+                        {({item})=>{ return (
+                                        <TouchableOpacity
+                                            onPress={ () => this.onClic(item) }>
+                                             <ArtistBox artist={item} /> 
+                                        </TouchableOpacity>)
+                                    }
+                        } />
+             
+                            );
+            }
+        }
+   
+
