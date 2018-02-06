@@ -1,42 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
-import ArtistBox from './modulos/ArtistBox';
-import {getArtists} from './modulos/api-clienteA';
+import {Scene, Router} from 'react-native-router-flux';
+import HomeView from './modulos/HomeVIew';
+import ArtistDetail from './modulos/ArtistDetail';
 export default class App extends React.Component {
-    state = {artists: []}
-    componentDidMount() {
-        getArtists().then((datos) => this.setState({artists: datos}))
-    }
-    onClic(item) {
-        console.warn(item); 
-    }
     render() {
         return (
-                <View style={styles.container}>          
-                    <FlatList  
-                        data={this.state.artists}
-                        renderItem=
-                        {({item})=>{ return (
-                                        <TouchableOpacity
-                                            onPress={ () => this.onClic(item) }>
-                                             <ArtistBox artist={item} /> 
-                                        </TouchableOpacity>)
-                                    }
-                        } />
+                <View style={styles.container}>   
+                <Router>
+                <Scene key="root">
+                    <Scene key="home" component={HomeView} />
+                     <Scene key="artistView" component={ArtistDetail} />       
+                </Scene>
+                </Router>
                 </View>
                             );
             }
         }
-        const styles = StyleSheet.create({
-            container: {
-                flex: 1,
-                backgroundColor: '#fff',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                marginTop: 25,
-            }
-
-        });
-
-
-
+     
