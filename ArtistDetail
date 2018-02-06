@@ -1,0 +1,42 @@
+import React from 'react';
+import { StyleSheet,Text,  View , Image} from 'react-native';
+import ArtistBox from './ArtistBox';
+export default class ArtistDetail extends React.Component {
+  render() {    
+     const artist= this.props.artist;
+     return (
+     
+          <View style={styles.caja}>
+             <ArtistBox artist ={artist} />
+         </View>
+  
+    );
+  }
+}
+const styles = StyleSheet.create({
+
+  caja: {
+      backgroundColor: '#ccc',
+      flexDirection: 'row', 
+      height:150,
+      marginBottom: 5,
+  },  
+  imagen:{
+      width:150,  
+      height:150
+  },
+  nombre: {
+      fontSize: 28,   
+      textAlign: 'center', 
+   
+  }, 
+  likes:{
+      flexDirection: 'row',
+      justifyContent: 'space-around', 
+  },
+  info: {
+    flex: 1,  
+   justifyContent: 'center',
+  },
+
+});
