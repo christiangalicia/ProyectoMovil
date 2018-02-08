@@ -1,30 +1,72 @@
-
-
-
 import React from 'react';
-import { StyleSheet,Text,  View , Image} from 'react-native';
+import { StyleSheet,Text,  View , Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {firebaseDatabase} from './FireBase';
 export default class ArtistBox extends React.Component {
-  constructor(props){
-       super(props);   
-     
-   
-  }
-        render() {    
+    state ={liked:false, likeCount:0}
+    
+    onClic(){
+       this.toogleLike();
+    }
+    componentWillMount(){
+        const ide=9;  
+        const artistaID = this.props.artist.id
+        let artist = firebaseDatabase.ref('artist/'+artistaID);
+        artist.on('value' ,snapshot => {
+            const art = snapshot.val();
+            if(art){
+                this.setState({
+                    liked: art.likes && art.likes[ide],
+                    likeCount: art.likeCount,
+                });
+            }
+        })
+    }
+    toogleLike= ()=>{
+         const ide=9;  
+        const artistaID= this.props.artist.id;
+      //this.setState({liked: !this.state.liked }) 
+      let artist = firebaseDatabase.ref('artist/'+artistaID);
+      artist.transaction(function(post) {
+            if (post) {
+              if (post.likes && post.likes[ide]) {
+                post.likeCount--;
+                post.likes[ide] = null;
+              } else {
+                post.likeCount++;
+                if (!post.likes) {
+                  post.likes = {};
+                }
+                post.likes[ide] = true;
+              } 
+              return post;
+            }
+            return { likeCount:1,
+                      likes: {
+                          [ide]:true
+                      }}
+          });
+    }
+    render() {         
+     const likeicon = this.state.liked ? 
+      <Icon name="thumbs-o-up" size={35} color="blue" /> :
+       <Icon name="thumbs-o-up" size={30} color="#900" />
      const {image, name, likes, comments} =  this.props.artist; ;
 
-     return (
-     
+     return (  
           <View style={styles.caja}>
              <Image style={styles.imagen} source={{uri: image}} /> 
               <View style={styles.info}>
               <Text style={styles.nombre} >{name}</Text>
                       <View style={styles.likes}> 
-                      <Text>{likes}</Text>
+                      <Text>{this.state.likeCount}</Text> 
                       <Text>{comments}</Text>
                       </View>
                       <View style={styles.likes}> 
-                        <Icon name="thumbs-o-up" size={30} color="#900" />
+                        <TouchableOpacity 
+                              onPress={ () => this.onClic() }>
+                        {likeicon}
+                        </TouchableOpacity>
                         <Icon name="commenting-o" size={30} color="#900" /> 
                       </View>
              </View>
@@ -61,5 +103,6 @@ const styles = StyleSheet.create({
   },
 
 });
+
 
 
