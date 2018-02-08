@@ -1,25 +1,50 @@
 import React from 'react';
-import { StyleSheet,Text,  View , Image} from 'react-native';
+import { StyleSheet,Text,  View , Image, TextInput,TouchableOpacity} from 'react-native';
 import ArtistBox from './ArtistBox';
+import Icon from 'react-native-vector-icons/FontAwesome';
 export default class ArtistDetail extends React.Component {
   render() {    
      const artist= this.props.artist;
      return (
-     
+             <View style={styles.contenedor}>
           <View style={styles.caja}>
              <ArtistBox artist ={artist} />
+                             
          </View>
+         <View style={styles.inputContainer}>
+                     <TextInput style={styles.input} />
+                             <TouchableOpacity>
+                              <Icon name="share-square" size={30} color="gray" /> 
+                         </TouchableOpacity>
+                    </View>  
+           </View>
   
     );
   }
 }
 const styles = StyleSheet.create({
-
+  input:{
+      height:50,
+      flex:1 
+  },
+  contenedor:{
+      flex:1,
+      flexDirection: 'column',
+  },
+  inputContainer:{  
+     
+    backgroundColor: 'white',
+      flexDirection: 'column',
+       alignItems:'flex-end',
+      paddingHorizontal:10
+  },
   caja: {
       backgroundColor: '#ccc',
-      flexDirection: 'row', 
       height:150,
-      marginBottom: 5,
+      flexDirection: 'row',
+      alignSelf: 'stretch',
+       alignItems:'flex-start',
+      marginBottom: 5, 
   },  
   imagen:{
       width:150,  
@@ -40,3 +65,4 @@ const styles = StyleSheet.create({
   },
 
 });
+
