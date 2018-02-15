@@ -1,0 +1,16 @@
+import React from 'react';
+import { StyleSheet,Text} from 'react-native';
+export default class Comment extends React.Component {
+
+   
+    render() {         
+      let comm = this.props.comment.comment;
+     return (<Text>{comm}</Text>);
+  }
+} 
+const styles = StyleSheet.create({
+
+  
+});
+
+
