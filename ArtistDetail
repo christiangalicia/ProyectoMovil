@@ -1,51 +1,73 @@
 import React from 'react';
-import { StyleSheet,Text,  View , Image, TextInput,TouchableOpacity} from 'react-native';
+import { StyleSheet,Text,KeyboardAvoidingView,  View , Image, TextInput,TouchableOpacity} from 'react-native';
 import ArtistBox from './ArtistBox';
+import CommentList from './CommentList'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {firebaseDatabase} from './FireBase';
 export default class ArtistDetail extends React.Component {
-  render() {    
+     state ={comment:'', comments:[]}
+     
+    send = ()=> {
+       const id = this.props.artist.id;
+         let comments = firebaseDatabase.ref('comments/'+id); 
+          let key= comments.push();
+         key.set({
+             comment: this.state.comment,
+         })
+   }    
+ 
+   componentDidMount(){
+        const id = this.props.artist.id;
+            let comments2 = firebaseDatabase.ref('comments/'+id); 
+        comments2.on('child_added', (data) =>{ 
+                  const com=  data.val();
+                  this.setState(
+                     {comments: this.state.comments.concat(com)})
+        });
+   }
+   render() {    
      const artist= this.props.artist;
-     return (
-             <View style={styles.contenedor}>
-          <View style={styles.caja}>
+     return (  
+        <View style={styles.container}>
              <ArtistBox artist ={artist} />
-                             
+              <CommentList commentList={this.state.comments} />
+                    <View  style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Opina sobre este artista"
+                      onChangeText={ (text)=>this.setState({comment:text}) }
+                    />
+                    <TouchableOpacity onPress={this.send}>
+                      <Icon name="location-arrow" size={30} color="gray" />
+                    </TouchableOpacity>
+                    </View>
+                 
          </View>
-         <View style={styles.inputContainer}>
-                     <TextInput style={styles.input} />
-                             <TouchableOpacity>
-                              <Icon name="share-square" size={30} color="gray" /> 
-                         </TouchableOpacity>
-                    </View>  
-           </View>
+         
   
     );
   }
 }
 const styles = StyleSheet.create({
-  input:{
-      height:50,
-      flex:1 
-  },
-  contenedor:{
+  container: {
+      backgroundColor: 'gray',
       flex:1,
-      flexDirection: 'column',
-  },
-  inputContainer:{  
-     
-    backgroundColor: 'white',
-      flexDirection: 'column',
-       alignItems:'flex-end',
-      paddingHorizontal:10
-  },
-  caja: {
-      backgroundColor: '#ccc',
-      height:150,
-      flexDirection: 'row',
-      alignSelf: 'stretch',
-       alignItems:'flex-start',
-      marginBottom: 5, 
   },  
+  inputContainer:{
+        flexDirection: 'row',
+        alignItems:'center',
+        position: 'absolute',
+     bottom: 0,
+    right: 0,
+    left: 0,
+        backgroundColor: 'white',
+        height:50,
+        paddingHorizontal:10,
+   },
+   input:{
+    flex:1,
+    height:50,
+   },
   imagen:{
       width:150,  
       height:150
@@ -65,4 +87,5 @@ const styles = StyleSheet.create({
   },
 
 });
+
 
