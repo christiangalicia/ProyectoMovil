@@ -3,27 +3,36 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native'
 import {Scene, Router} from 'react-native-router-flux';
 import HomeView from './modulos/HomeVIew';
 import ArtistDetail from './modulos/ArtistDetail';
+import Autenticar from './modulos/Autenticar';
+import Menu from './modulos/Menu'; 
+import {Actions} from 'react-native-router-flux';
+import {firebaseAuth} from './modulos/FireBase';
 export default class App extends React.Component {
+        
+
+    componentDidMount(){
+        firebaseAuth.onAuthStateChanged(function(user) {
+            if (user) {
+             Actions.home();
+            } 
+          });
+
+    }
+         
     render() {
-        return (
-                <View style={styles.container}>   
-                <Router>
-                <Scene key="root">
-                    <Scene key="home" component={HomeView} />
-                     <Scene key="artistView" component={ArtistDetail} />       
-                </Scene>
-                </Router>
-                </View>
-                            );
-            }
-        }
-     
-     const styles = StyleSheet.create({
-   container: {
-                flex: 1,
-                backgroundColor: '#fff',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                marginTop: 25,
-            }
+       return (<Menu />);
+        
+
+    }
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        marginTop: 25,
+    }
 });
+      
