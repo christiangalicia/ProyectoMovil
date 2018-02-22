@@ -1,16 +1,34 @@
 import React from 'react';
-import { StyleSheet,Text} from 'react-native';
+import { StyleSheet,Text, View, Image} from 'react-native';
 export default class Comment extends React.Component {
 
-   
-    render() {         
-      let comm = this.props.comment.comment;
-     return (<Text>{comm}</Text>);
+    render() { 
+        const comm = this.props.comment.comment;
+            return (
+                    <View style={styles.comment}>
+                <Image style={styles.avatar} 
+                    source={{uri:'https://northmemorial.com/wp-content/uploads/2016/10/PersonPlaceholder.png'}} />
+                    <Text style={styles.text}>{comm} </Text>
+                    </View> )
   }
-} 
+}
 const styles = StyleSheet.create({
+ comment:{
+     backgroundColor:'#fff0f1',
+     padding:10,
+     margin:5, 
+     borderRadius:5
+ },
+ text:{
+     fontSize:16,
+ },
+ avatar:{
+    width: 20,
+    height:20
+ }
+ 
 
-  
 });
+
 
 
