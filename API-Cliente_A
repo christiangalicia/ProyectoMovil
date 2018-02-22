@@ -4,6 +4,7 @@ function getArtists(){
             .then(datosJson => datosJson.topartists.artist)
             .then( artists => artists.map(artist =>{
                 return {
+                    id: artist.mbid,
                     image: artist.image[2]['#text'],
                     name:artist.name,
                     likes: 348,
