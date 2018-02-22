@@ -1,47 +1,50 @@
 import React from 'react';
-import { StyleSheet,Text,KeyboardAvoidingView,  View , Image, TextInput,TouchableOpacity} from 'react-native';
+import { StyleSheet,Text,  View , Image, TextInput,TouchableOpacity} from 'react-native';
 import ArtistBox from './ArtistBox';
 import CommentList from './CommentList'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {firebaseDatabase} from './FireBase';
+import Icon from 'react-native-vector-icons/FontAwesome';
 export default class ArtistDetail extends React.Component {
-     state ={comment:'', comments:[]}
-     
-    send = ()=> {
-       const id = this.props.artist.id;
-         let comments = firebaseDatabase.ref('comments/'+id); 
-          let key= comments.push();
-         key.set({
-             comment: this.state.comment,
-         })
-   }    
- 
-   componentDidMount(){
+   state= {comment:'', comments:[]}
+    
+    send = ()=>{
         const id = this.props.artist.id;
-            let comments2 = firebaseDatabase.ref('comments/'+id); 
-        comments2.on('child_added', (data) =>{ 
-                  const com=  data.val();
-                  this.setState(
-                     {comments: this.state.comments.concat(com)})
+      let comments = firebaseDatabase.ref('comments/'+id)
+       let comments2 =comments.push();
+       comments2.set({ 
+            comment: this.state.comment,
         });
-   }
+    }
+    componentDidMount(){
+       const id = this.props.artist.id;
+      let commentArtist = firebaseDatabase.ref('comments/'+id)
+        commentArtist.on('child_added', (data) => {
+          let com= data.val()
+           this.setState({comments:this.state.comments.concat(com) })
+        }); 
+    } 
+    componentWillUnmount(){
+        const id = this.props.artist.id;
+      let commentArtist = firebaseDatabase.ref('comments/'+id)
+      commentArtist.off(); 
+    }
    render() {    
      const artist= this.props.artist;
-     return (  
+     return (
+          
         <View style={styles.container}>
              <ArtistBox artist ={artist} />
-              <CommentList commentList={this.state.comments} />
-                    <View  style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Opina sobre este artista"
-                      onChangeText={ (text)=>this.setState({comment:text}) }
-                    />
-                    <TouchableOpacity onPress={this.send}>
-                      <Icon name="location-arrow" size={30} color="gray" />
-                    </TouchableOpacity>
-                    </View>
-                 
+             
+             <CommentList commentList={this.state.comments} />
+             
+             <View style={styles.inputContainer}>
+               <TextInput style={styles.input} 
+               placeholder="Deja tu comentario"
+               onChangeText={(text)=>this.setState({comment:text})} />
+               <TouchableOpacity onPress={this.send} >
+            <Icon name="location-arrow" size={30} color="gray" /> 
+                </TouchableOpacity>
+            </View>         
          </View>
          
   
@@ -49,6 +52,7 @@ export default class ArtistDetail extends React.Component {
   }
 }
 const styles = StyleSheet.create({
+
   container: {
       backgroundColor: 'gray',
       flex:1,
@@ -56,10 +60,10 @@ const styles = StyleSheet.create({
   inputContainer:{
         flexDirection: 'row',
         alignItems:'center',
-        position: 'absolute',
-     bottom: 0,
-    right: 0,
-    left: 0,
+        position:'absolute',
+        bottom:0,
+        right:0,
+        left:0,
         backgroundColor: 'white',
         height:50,
         paddingHorizontal:10,
@@ -87,5 +91,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-
